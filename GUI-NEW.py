@@ -86,6 +86,8 @@ def cv_imread(filePath):
 def clear_detect():
     for f in os.listdir('./det_res'):
         os.remove(os.path.join('./det_res',f))
+    for f in os.listdir('./R_tmp'):
+        os.remove(os.path.join('./R_tmp',f))
 
 
 # In[8]:
@@ -125,6 +127,7 @@ class GUI:
         self.frame2.pack_propagate(0)
         self.frame3=tk.Frame(self.root, bg='paleturquoise',width=50, height=50)#status bar
         self.frame3.pack_propagate(0)
+        self.img_R=None
         self.bar_text="""餐食照片營養素分析系統"""
         self.bar_pic=ImageTk.PhotoImage(image=resize3('./GUI/img/ai-logo.png', self.a))
         
@@ -204,6 +207,8 @@ class GUI:
         
     def logout(self):
         if askyesno('結束程式','確定要結束程式嗎?'):
+            if self.img_R!=None:
+                self.img_R.close()
             clear_detect()
             self.root.destroy()
             
@@ -232,7 +237,11 @@ class GUI:
             return
         clear_detect()
         global name_list, eva_list
-        name_list=sfname
+        name_list=[]
+        for n in sfname:
+            #i=int(n.split('/')[-1].split('.')[0])
+            shutil.copy(n, 'R_tmp/'+n.split('/')[-1])
+            name_list.append('R_tmp/'+n.split('/')[-1])
         eva_list=list(sfname)
         s=name_list[0].split('/')[-1]#file name
         self.root_name.set(name_list[0].split(s)[0])
@@ -250,9 +259,8 @@ class GUI:
             return
         self.status_txt.set('辨識中...')
         self.status.config(bg='yellow')
-        time.sleep(1)
         index=self.pic_index.get()
-        im, eva_list[index]=detect.exe([name_list[index]])
+        im, eva_list[index]=detect.exe(name_list[index])
         self.show_img('./det_res/result.jpg')
         self.res_exist.set(1)
         im.tofile('./det_res/'+str(index)+'.jpg')
@@ -267,7 +275,7 @@ class GUI:
         self.status.config(bg='yellow')
         self.progressbar()
         for i in range(length):
-            im, eva_list[i]=detect.exe([name_list[i]])#self.picName.get()
+            im, eva_list[i]=detect.exe(name_list[i])#self.picName.get()
             im.tofile('./det_res/'+str(i)+'.jpg')  
             self.prog_load(i)
         self.progress.grid_forget()
@@ -289,7 +297,7 @@ class GUI:
             return
         try:
             im=Image.open('./det_res/'+str(index)+'.jpg')
-            im=im.save(path)
+            im.save(path)
         except:
             showerror('錯誤','圖片儲存失敗!')
             
@@ -368,7 +376,7 @@ class GUI:
         img_resize=resize2(self.img_R,self.a)#img=PIL
         imgtk = ImageTk.PhotoImage(image=img_resize)
         self.video.imgtk = imgtk
-        self.video.config(image=imgtk)   
+        self.video.config(image=imgtk)
 
 
 # In[11]:
@@ -377,10 +385,10 @@ class GUI:
 GUI()
 
 
-# In[13]:
+# In[12]:
 
 
-get_ipython().system('jupyter nbconvert --to script detect.ipynb')
+#!jupyter nbconvert --to script detect.ipynb
 
 
 # In[ ]:

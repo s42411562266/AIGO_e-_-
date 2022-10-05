@@ -118,17 +118,14 @@ def draw(im, box, txt_color=(255,255,255)):#Arial.ttf
     return np.asarray(im0), check_pass([int(total_num[1]/total_num_sum*100), int(total_num[0]/total_num_sum*100),int(total_num[2]/total_num_sum*100)])
 
 
-# In[8]:
+# In[1]:
 
 
 def exe(get):
-    name_list=[]
-    path_list=get
-    for i, name in enumerate(path_list):
-        pic=cv2.imdecode(np.fromfile(name, dtype=np.uint8), cv2.IMREAD_COLOR)
-        img, failed=draw(pic, detect(name).tolist())
-        a=cv2.imencode('.jpg', img)[1]
-        a.tofile('./det_res/result.jpg')
+    pic=cv2.imdecode(np.fromfile(get, dtype=np.uint8), cv2.IMREAD_COLOR)
+    img, failed=draw(pic, detect(get).tolist())
+    a=cv2.imencode('.jpg', img)[1]
+    a.tofile('./det_res/result.jpg')
         #cv2.imwrite('./det_res/'+name.split('/')[-1], img)
     return a, failed
 
