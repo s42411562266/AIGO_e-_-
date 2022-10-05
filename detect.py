@@ -13,7 +13,7 @@ import pandas as pd
 import pickle
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
-model = torch.hub.load("./yolov5-master","custom",path='./weight/0924/exp100/weights/best.pt',source='local', device='cpu')
+model = torch.hub.load("./yolov5-master","custom",path='./weight/0924/exp100/weights/best.pt',source='local', device='cpu', force_reload=True)
 model.conf = 0.35
 
 
@@ -78,7 +78,7 @@ def check_pass(res):
         return (1, 0)
 
 
-# In[1]:
+# In[7]:
 
 
 def draw(im, box, txt_color=(255,255,255)):#Arial.ttf
@@ -118,7 +118,7 @@ def draw(im, box, txt_color=(255,255,255)):#Arial.ttf
     return np.asarray(im0), check_pass([int(total_num[1]/total_num_sum*100), int(total_num[0]/total_num_sum*100),int(total_num[2]/total_num_sum*100)])
 
 
-# In[1]:
+# In[8]:
 
 
 def exe(get):
