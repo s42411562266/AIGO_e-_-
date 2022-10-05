@@ -65,6 +65,8 @@ def get_area_single(data,x,y):
 
 
 # In[6]:
+
+
 def check_pass(res):
     if res[0]<39:
         return (-1, 0)
@@ -75,9 +77,13 @@ def check_pass(res):
     else:
         return (1, 0)
 
-def draw(im, box, txt_color=(255,255,255), font='Arial.Unicode.ttf'):#Arial.ttf
+
+# In[1]:
+
+
+def draw(im, box, txt_color=(255,255,255)):#Arial.ttf
     y, x = im.shape[:2]
-    font=ImageFont.truetype('NotoSansTC-Regular.otf', max(round(sum(im.shape) / 2 * 0.02), 12))
+    font=ImageFont.truetype('./font/TaipeiSansTCBeta-Regular.ttf', max(round(sum(im.shape) / 2 * 0.02), 12))
     im0=Image.fromarray(im)
     draw = ImageDraw.Draw(im0)
     total_num=get_area(box,x,y)
@@ -105,14 +111,14 @@ def draw(im, box, txt_color=(255,255,255), font='Arial.Unicode.ttf'):#Arial.ttf
                             box1[0] + w + 1,
                             box1[1] + 1 if outside else box1[1] + h + 1), fill=color)
             draw.text((box1[0], box1[1] - h if outside else box1[1]), label, fill=txt_color, font=font)  
-    font2 = ImageFont.truetype('NotoSansTC-Regular.otf', max(round(sum(im.shape) / 2 * 0.025), 12))#70
+    font2 = ImageFont.truetype('./font/TaipeiSansTCBeta-Regular.ttf', max(round(sum(im.shape) / 2 * 0.025), 12))#70
     w1, h1 = font2.getsize_multiline(summary)
     draw.rectangle([(0,0), (w1+10,h1+10)], fill=(130,221,238))
     draw.text((0,0),summary,fill=(205,0,0), font=font2)
     return np.asarray(im0), check_pass([int(total_num[1]/total_num_sum*100), int(total_num[0]/total_num_sum*100),int(total_num[2]/total_num_sum*100)])
 
 
-# In[7]:
+# In[8]:
 
 
 def exe(get):
@@ -126,10 +132,11 @@ def exe(get):
         #cv2.imwrite('./det_res/'+name.split('/')[-1], img)
     return a, failed
 
+
 # In[9]:
 
 
-#exe(['C:/Users/PUPU/Documents/AI/AIGO_valid/images/IMG_20220714_181945.jpg'])
+#exe(['./AIGO_valid/images/370.jpg'])
 
 
 # In[ ]:

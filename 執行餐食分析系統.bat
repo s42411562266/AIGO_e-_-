@@ -1,2 +1,2 @@
 pip install -r requirements.txt
-python run.py
+python GUI-NEW.py
