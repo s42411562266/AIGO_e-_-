@@ -100,14 +100,14 @@ def get_resize(a,b,s):
     return int(round(b/((830/a[1])*1.5), 0))#height
 
 
-# In[9]:
+# In[14]:
 
 
 def check_tmp():
     if not os.path.isdir('det_res'):
-        os.makedir('det_res')
+        os.mkdir('det_res')
     if not os.path.isdir('R_tmp'):
-        os.makedir('R_tmp')
+        os.mkdir('R_tmp')
 
 
 # In[10]:
@@ -392,10 +392,10 @@ class GUI:
 GUI()
 
 
-# In[12]:
+# In[13]:
 
 
-#!jupyter nbconvert --to script detect.ipynb
+#!jupyter nbconvert --to script GUI-NEW.ipynb
 
 
 # In[ ]:
