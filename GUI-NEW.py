@@ -83,16 +83,6 @@ def cv_imread(filePath):
 # In[7]:
 
 
-def clear_detect():
-    for f in os.listdir('./det_res'):
-        os.remove(os.path.join('./det_res',f))
-    for f in os.listdir('./R_tmp'):
-        os.remove(os.path.join('./R_tmp',f))
-
-
-# In[8]:
-
-
 def list2tuple(data):
     out=data
     a=()
@@ -101,7 +91,7 @@ def list2tuple(data):
     return a
 
 
-# In[9]:
+# In[8]:
 
 
 def get_resize(a,b,s):
@@ -110,11 +100,22 @@ def get_resize(a,b,s):
     return int(round(b/((830/a[1])*1.5), 0))#height
 
 
+# In[9]:
+
+
+def check_tmp():
+    if not os.path.isdir('det_res'):
+        os.makedir('det_res')
+    if not os.path.isdir('R_tmp'):
+        os.makedir('R_tmp')
+
+
 # In[10]:
 
 
 class GUI:
     def __init__(self):
+        check_tmp()
         self.root = tk.Tk()
         self.root.title('餐食照片營養素分析系統')
         self.a=sc_mid(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
@@ -188,7 +189,15 @@ class GUI:
         self.frame3.pack(fill='x',pady=(20,0))#2 toolbar
         self.frame2.pack(fill='both', expand=1)#pic area pack
         self.root.mainloop()
-     
+        
+    def clear_detect(self):
+        if self.img_R!=None:
+            self.img_R.close()
+        for f in os.listdir('./det_res'):
+            os.remove(os.path.join('./det_res',f))
+        for f in os.listdir('./R_tmp'):
+            os.remove(os.path.join('./R_tmp',f))
+        
     def show_img(self, path):
         img=Image.open(path)
         img_resize=resize2(img,self.a)
@@ -207,9 +216,7 @@ class GUI:
         
     def logout(self):
         if askyesno('結束程式','確定要結束程式嗎?'):
-            if self.img_R!=None:
-                self.img_R.close()
-            clear_detect()
+            self.clear_detect()
             self.root.destroy()
             
     def show_valid(self, res):
@@ -235,7 +242,7 @@ class GUI:
 
         if sfname=='':
             return
-        clear_detect()
+        self.clear_detect()
         global name_list, eva_list
         name_list=[]
         for n in sfname:
@@ -371,7 +378,7 @@ class GUI:
         if self.pic_exist.get()==0:
             return
         self.img_R=self.img_R.rotate(-90, expand=1) if RL=='R' else self.img_R.rotate(90, expand=1)
-        if os.path.isfile('./det_res/'+str(index)+'.jpg')==False:
+        if not os.path.isfile('./det_res/'+str(index)+'.jpg'):
             self.img_R.save(name_list[index])   
         img_resize=resize2(self.img_R,self.a)#img=PIL
         imgtk = ImageTk.PhotoImage(image=img_resize)

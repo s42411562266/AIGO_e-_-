@@ -13,7 +13,7 @@ import pandas as pd
 import pickle
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
-model = torch.hub.load("./yolov5-master","custom",path='./weight/0924/exp100/weights/best.pt',source='local', device='cpu', force_reload=True)
+model = torch.hub.load("./yolov5-master","custom",path='./weight/1005/exp200/weights/best.pt',source='local', device='cpu', force_reload=True)
 model.conf = 0.35
 
 
